@@ -1,0 +1,258 @@
+#!/bin/bash
+# CS 218, assignment #10 test script.
+
+# ---------------------------------------------------------
+# Initial checks.
+#	Ensure executable file exists.
+
+if [ -z $1 ]; then
+	echo "Error, must provide executable file name."
+	exit
+fi
+#
+if [ ! -e $1 ] || [ ! -x $1 ]; then
+	echo "Error, unable to find $1 executable file."
+	exit
+fi
+#
+# ---------------------------------------------------------
+# Define script variables and function
+#
+bolded=`tput bold`
+normal=`tput sgr0`
+#
+pause() {
+	if [ "$1" = "skip" ]; then
+		echo
+	else
+		echo
+		echo -n "Press return to continue"
+		read
+		clear
+	fi
+}
+#
+# ---------------------------------------------------------
+# Display initial page
+#
+clear
+echo
+echo
+echo ${bolded}Assignment 10 - Error Testing Utility${normal}
+echo
+echo
+echo
+echo "Various tests should generate appropriate error messages."
+echo
+echo
+echo "Note, this utility assumes the program is working or very"
+echo "      close to working.  Testing on an incomplete"
+echo "      program will not be useful."
+echo
+echo
+pause $2
+#
+# ---------------------------------------------------------
+# Begin tests.
+#
+echo
+echo "------------------------------------"
+echo "Error testing -> usage message"
+echo "     $1 should show usage message"
+echo
+echo
+echo ${bolded}$1${normal}
+./$1
+echo
+#
+echo ${bolded}$1${normal}
+./$1     
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> wrong number of command line arguments"
+echo "     $1 should show error message for invalid or incomplete number of arguments"
+echo
+echo
+echo ${bolded}$1 -r${normal}
+./$1 -r
+echo
+#
+echo ${bolded}$1 -r1${normal}
+./$1 -r1
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -op 3a -cl r blue${normal}
+./$1 -r1 a4 -r2 23 -op 3a -cl r blue
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -op 3a -cl r b -cl g -r1 f3${normal}
+./$1 -r1 a4 -r2 23 -op 3a -cl r b -cl g -r1 f3
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> wrong or bad specifiers"
+echo "     $1 should show error message for incorrect radius specifiers"
+echo
+echo
+#
+echo ${bolded}$1 r1 a4 -r2 23 -op 3a -cl r${normal}
+./$1 r1 a4 -r2 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -t1 a4 -r2 23 -op 3a -cl r${normal}
+./$1 -t1 a4 -r2 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r22 23 -op 3a -cl r${normal}
+./$1 -r1 a4 -r22 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 a4 -22 23 -op 3a -cl r${normal}
+./$1 -r1 a4 -22 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r22 23 -op 3a -cl r${normal}
+./$1 -r1 a4 -r22 23 -op 3a -cl r
+echo
+#
+pause $2
+echo
+echo "Error testing -> wrong or bad specifiers"
+echo "     $1 should show error message for incorrect position and color specifiers"
+echo
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -opp 3a -cl r${normal}
+./$1 -r1 a4 -r2 23 -opp 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -op 3a -color r${normal}
+./$1 -r1 a4 -r2 23 -op 3a -color r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -op 3a -cr r${normal}
+./$1 -r1 a4 -r2 23 -op 3a -cr r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -op 3a -c r${normal}
+./$1 -r1 a4 -r2 23 -op 3a -c r
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> incorrect ranges"
+echo "     $1 should show error message for incorrect radius range"
+echo
+echo
+#
+echo ${bolded}$1 -r1 0 -r2 23 -op 3a -cl r${normal}
+./$1 -r1 0 -r2 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 ff -r2 23 -op 3a -cl r${normal}
+./$1 -r1 ff -r2 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 0 -op 3a -cl r${normal}
+./$1 -r1 a4 -r2 0 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 fb -op 3a -cl r${normal}
+./$1 -r1 a4 -r2 fb -op 3a -cl r
+echo
+#
+echo ${bolded}$1  -r1 a4 -r2 2AA3 -op 3Aa -cl r${normal}
+./$1 -r1 a4 -r2 2AA3 -op 3Aa -cl r
+echo
+#
+pause $2
+echo
+echo "Error testing -> incorrect ranges"
+echo "     $1 should show error message for incorrect ranges"
+echo
+echo
+#
+echo ${bolded}$1  -r1 a4 -r2 2A -op 0 -cl r${normal}
+./$1 -r1 a4 -r2 2A -op 0 -cl r
+echo
+#
+echo ${bolded}$1  -r1 a4 -r2 2A -op fb -cl r${normal}
+./$1 -r1 a4 -r2 2A -op fb -cl r
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> bad values"
+echo "     $1 should show error message for incorrect ranges"
+echo
+echo
+#
+echo ${bolded}$1 -r1 fh -r2 23 -op 3a -cl r${normal}
+./$1 -r1 fh -r2 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 000@0 -r2 23 -op 3a -cl r${normal}
+./$1 -r1 000@0 -r2 23 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 0001a -r2 2x3 -op 3a -cl r${normal}
+./$1 -r1 0001a -r2 2x3 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 0001a -r2 x3 -op 3a -cl r${normal}
+./$1 -r1 0001a -r2 x3 -op 3a -cl r
+echo
+#
+echo ${bolded}$1 -r1 0001a -r2 D3 -op 3X -cl r${normal}
+./$1 -r1 0001a -r2 D3 -op 3X -cl r
+echo
+#
+pause $2
+echo
+echo "Error testing -> bad values"
+echo "     $1 should show error message for incorrect values"
+echo
+echo
+#
+echo ${bolded}$1 -r1 a4 -r2 23 -op 3a -cl red${normal}
+./$1 -r1 a4 -r2 23 -op 3a -cl red
+echo
+#
+echo ${bolded}$1 -r1 00a1 -r2 23 -op 3a -cl k${normal}
+./$1 -r1 00a1 -r2 23 -op 3a -cl k
+echo
+#
+echo ${bolded}$1  -r1 FF -r2 23 -op 3a -cl m${normal}
+./$1 -r1 FF -r2 23 -op 3a -cl m
+echo
+#
+echo ${bolded}$1 -r1 00012 -r2 23 -op 3a -cl t${normal}
+./$1 -r1 00012 -r2 23 -op 3a -cl t
+echo
+#
+pause $2
+#
+# ---------------------------------
+# OK, final test is to display image
+#
+echo "------------------------------------"
+echo "Final test -> display"
+echo "     $1 should show image from assignment handout"
+echo
+echo
+echo ${bolded}$1 -r1 af -r2 2a -op 6a -cl b${normal}
+pause $2
+./$1 -r1 0af -r2 2a -op 6a -cl b
+
+
